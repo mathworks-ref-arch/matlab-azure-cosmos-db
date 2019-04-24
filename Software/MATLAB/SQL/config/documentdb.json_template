@@ -1,0 +1,4 @@
+{
+   "serviceEndpoint" : "https://myaccountname.documents.azure.com:443/",
+   "masterKey" : "myaccountkeyvalue"
+}

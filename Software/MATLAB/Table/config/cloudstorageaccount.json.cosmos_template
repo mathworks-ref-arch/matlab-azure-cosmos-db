@@ -1,0 +1,8 @@
+{
+    "DefaultEndpointsProtocol" : "https",
+    "AccountKey" : "VSf<REDACTED>bXfw==",
+    "UseDevelopmentStorage" : "false",
+    "AccountName" : "mycosmosdbaccountname",
+    "ServiceName" : "table",
+    "CosmosDB" : "true"
+}
