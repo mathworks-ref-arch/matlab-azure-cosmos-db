@@ -5,7 +5,6 @@ The Cosmos DB SQL API supported by this package builds upon the Microsoft Java S
 
 This document is a basic guide to using the Interface and does not describe Cosmos DB itself or all of the supported operations. Further details can be found in the [API reference document](ApiRefSQL.md). The provided test suite */Software/MATLAB/SQL/test/unit/testDocumentDb.m* can also serve as a reference. For information on accessing Cosmos DB via APIs other than SQL, e.g. Table, see the respective documentation.
 
-
 ## Create a Cosmos DB SQL API account
 Before using SQL API, create a Cosmos DB account with SQL API specified as the interface. The necessary steps can be found here: [https://docs.microsoft.com/en-us/azure/cosmos-db/create-sql-api-java](https://docs.microsoft.com/en-us/azure/cosmos-db/create-sql-api-java)
 
@@ -30,6 +29,21 @@ docClient.close;
 
 When working with Cosmos DB databases, particularly during development, it is useful to open the [Azure portal](https://portal.azure.com). The portal interface provides a GUI based view of the contents of your databases and basic editing features.
 
+When creating the client the consistency level the client will seek to apply can be set. The default level is *Session*.
+```
+% use Strong consistency
+myConsistencyLevel = azure.documentdb.ConsistencyLevel.Strong;
+docClient = azure.documentdb.DocumentClient('consistencyLevel', myConsistencyLevel);
+```
+
+A client connection policy can also be configured. This enables the use of a network proxy.
+See: [Network Configuration](NetworkConfiguration.md) for more details.
+```
+myConnectionPolicy = azure.documentdb.ConnectionPolicy();
+myConnectionPolicy.setProxy('http://proxy.example.com:3128');
+docClient = azure.documentdb.DocumentClient('connectionPolicy', myConnectionPolicy)
+```
+
 ## Supported Features
 This document does not describe all features or methods supported by the interface. Further details can be found in the [API reference document](CosmosDBSQLApi.md). Furthermore this interface does not support all features offered by the underlying SDK. However, it is extensible if additional SDK supported functionality is required. Should you need additional functionality please contact MathWorks as described in [README.md](../README.md).
 
@@ -50,7 +64,7 @@ The follow code creates a database, assuming it does not already exist.
 % create a document client
 docClient = azure.documentdb.DocumentClient();
 
-% configure the data database Is and stanadrd options
+% configure the data database ID and standard options
 database = azure.documentdb.Database('mytestdatabase');
 options = azure.documentdb.RequestOptions();
 

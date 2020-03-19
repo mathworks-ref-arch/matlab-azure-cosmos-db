@@ -4,6 +4,9 @@
 ## Objects:
 * `Software\MATLAB\SQL\app\system\+azure\@object`
 * `Software\MATLAB\SQL\app\system\+azure\+documentdb\@Attachment`
+* `Software\MATLAB\SQL\app\system\+azure\+documentdb\@ConnectionMode`
+* `Software\MATLAB\SQL\app\system\+azure\+documentdb\@ConnectionPolicy`
+* `Software\MATLAB\SQL\app\system\+azure\+documentdb\@ConsistencyLevel`
 * `Software\MATLAB\SQL\app\system\+azure\+documentdb\@DataType`
 * `Software\MATLAB\SQL\app\system\+azure\+documentdb\@Database`
 * `Software\MATLAB\SQL\app\system\+azure\+documentdb\@Document`
@@ -135,6 +138,84 @@
 ------
 
 
+## @ConnectionMode
+
+### @ConnectionMode/ConnectionMode.m
+```notalanguage
+  CONNECTIONMODE Enumeration for modes used by the client in Cosmos DB
+ 
+  DirectHttps specifies that requests to resources are made directly to the
+  data nodes through HTTPS. In DirectHttps mode, all requests to server
+  resources within a collection are made directly to the data nodes using
+  the HTTPS transport protocol.
+  Certain operations on account or database level resources, such as
+  databases, collections and users, etc.,
+  are always routed through the gateway using HTTPS.
+ 
+  Gateway specifies that requests to resources are made through a gateway
+  proxy using HTTPS. In Gateway mode, all requests are made through a
+  gateway proxy.
+
+```
+
+------
+
+
+## @ConnectionPolicy
+
+### @ConnectionPolicy/ConnectionPolicy.m
+```notalanguage
+  CONNECTIONPOLICY Represents Connection policy associated with a DocumentClient
+ 
+  Example:
+     myConnectionPolicy = azure.documentdb.ConnectionPolicy();
+     myConnectionPolicy.setProxy('http://myproxy.mycompany.com:8080');
+     docClient = azure.documentdb.DocumentClient('connectionPolicy', myConnectionPolicy)
+
+```
+### @ConnectionPolicy/setProxy.m
+```notalanguage
+  SETPROXY Sets a proxy which will be used when making a request
+  If setProxy is called with no arguments it will will use the MATLAB
+  proxy preference settings or if not set and on Windows the systems preferences
+  will be used. A specific value can also be used.
+ 
+  Examples:
+     Set the proxy to that set in the MATLAB preferences panel
+     if preferences are not set then use system preferences (Windows only):
+         cp = azure.documentdb.ConnectionPolicy();
+         cp.setProxy();
+ 
+     Set the proxy to a specific value:
+         cp.setProxy('http://myproxy.mycompany.com:8080');
+
+```
+
+------
+
+
+## @ConsistencyLevel
+
+### @ConsistencyLevel/ConsistencyLevel.m
+```notalanguage
+  CONSISTENCYLEVEL Represents consistency levels supported by Cosmos DB client
+  The requested level must match or be weaker than that provisioned for the
+  database account. In order of strength levels are:
+     Strong
+     BoundedStaleness
+     Session
+     Eventual
+  The default value used when a DocumentClient is created is Session.
+ 
+  Example:
+     myConsistencyLevel = azure.documentdb.ConsistencyLevel.Strong;
+     docClient = azure.documentdb.DocumentClient('consistencyLevel', myConsistencyLevel)
+
+```
+
+------
+
+
 ## @DataType
 
 ### @DataType/DataType.m
@@ -165,6 +246,14 @@
   approaches are equivalent.
   A database can also be created from a Java
   com.microsoft.azure.documentdb.Database object.
+ 
+  Examples:
+     database = azure.documentdb.Database()
+     database.setId('mydbname')
+     % or
+     database = azure.documentdb.Database('mydbname');
+     % or
+     database = azure.documentdb.Database(myJavaDatabaseObject);
 
 ```
 ### @Database/getId.m
@@ -276,6 +365,16 @@
     docClient.createDocument(mydocument);
 
 ```
+### @Document/toJson.m
+```notalanguage
+  TOJSON Converts to a JSON string in character vector form
+
+```
+### @Document/toString.m
+```notalanguage
+  TOSTRING Gets string representation of property bag in character vector form
+
+```
 
 ------
 
@@ -295,10 +394,21 @@
      database = azure.documentdb.Database('mydbname');
      docClient = azure.documentdb.DocumentClient()
      docClient.createDatabase(database);
-     % or using paramters to speify connections details
+ 
+     % or using parameters to specify connections details
      docClient = azure.documentdb.DocumentClient('serviceEndpoint', 'https://mycosmosaccount.documents.azure.com:443/', 'masterKey', 'p6iZa[MY REDACTED MASTER KEY]YZ7Q==')
-     % or where a non default configuration file holding credentials is used
+ 
+     % where a non default configuration file holding credentials is used
      docClient = azure.documentdb.DocumentClient('configurationFile', '/my/path/myconfigfile.json')
+ 
+     % where a non default connection policy is required e.g. to set a proxy
+     myConnectionPolicy = azure.documentdb.ConnectionPolicy();
+     myConnectionPolicy.setProxy('http://proxy.example.com:3128');
+     docClient = azure.documentdb.DocumentClient('connectionPolicy', myConnectionPolicy)
+ 
+     % where a custom consistency level is required, the default is session
+     myConsistencyLevel = azure.documentdb.ConsistencyLevel.Strong;
+     docClient = azure.documentdb.DocumentClient('consistencyLevel', myConsistencyLevel)
 
 ```
 ### @DocumentClient/close.m

@@ -59,7 +59,7 @@ iAddFilteredFolders(rootDirs);
 disp('Running post setup operations');
 % Setup Java dynamic path
 % Locate the Azure libraries
-libDir = fullfile(azCosmosDBRoot,'lib','jar');
+libDir = fullfile(here,'lib','jar');
 jarFiles = dir(fullfile(libDir,'azure-cosmosdb-sql-sdk-0.1.0.jar'));
 
 % Loop and add to the dynamic classpath

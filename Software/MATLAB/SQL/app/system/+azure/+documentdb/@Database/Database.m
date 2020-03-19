@@ -14,7 +14,7 @@ classdef Database < azure.object
 % approaches are equivalent.
 % A database can also be created from a Java
 % com.microsoft.azure.documentdb.Database object.
-
+%
 % Examples:
 %    database = azure.documentdb.Database()
 %    database.setId('mydbname')

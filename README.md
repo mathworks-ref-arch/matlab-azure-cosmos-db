@@ -5,7 +5,7 @@ This is a MATLAB® interface that connects to the Microsoft® Azure Cosmos DB™
 ## Requirements
 ### MathWorks products
 * Requires MATLAB release R2017b or later
-* Requires Database Toolbox
+* Requires Database Toolbox (for MongoDB API)
 * [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob) release 0.7.4 or later
 
 ### 3rd party products
@@ -24,7 +24,8 @@ This interface supports three interfaces for Cosmos DB:
   * MongoDB API
   * SQL (DocumentDB) API
   * Table API
-The Gremlin and Cassandra APIs are not currently supported.
+
+The Gremlin API and Cassandra API are not currently supported.
 
 ## SQL API
 The following are the main features of the interface:
@@ -135,7 +136,7 @@ MathWorks Products (http://www.mathworks.com)
 This package is primarily tested on Ubuntu™ 16.04 and Windows™ 10.
 
 ## License
-The license for the MATLAB Interface for Windows Azure Storage Blob is available in the [LICENSE.TXT](LICENSE.TXT) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.    
+The license for the MATLAB Interface *for Azure Cosmos DB* is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.    
 
 ## Enhancement Request
 Provide suggestions for additional features or capabilities using the following link:   
@@ -145,4 +146,4 @@ https://www.mathworks.com/products/reference-architectures/request-new-reference
 Email: `mwlab@mathworks.com`
 
 ------------
-[//]: #  (Copyright 2019, The MathWorks, Inc.)
+[//]: #  (Copyright 2019-2020, The MathWorks, Inc.)

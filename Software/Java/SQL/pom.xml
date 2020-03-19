@@ -101,7 +101,7 @@
                             <mainClass>com.mathworks.sdk.Version</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>../MATLAB/SQL/lib/jar</outputDirectory>
+                    <outputDirectory>../../MATLAB/SQL/lib/jar</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

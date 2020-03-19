@@ -10,10 +10,22 @@ classdef DocumentClient < azure.object
     %    database = azure.documentdb.Database('mydbname');
     %    docClient = azure.documentdb.DocumentClient()
     %    docClient.createDatabase(database);
-    %    % or using paramters to speify connections details
+    %
+    %    % or using parameters to specify connections details
     %    docClient = azure.documentdb.DocumentClient('serviceEndpoint', 'https://mycosmosaccount.documents.azure.com:443/', 'masterKey', 'p6iZa[MY REDACTED MASTER KEY]YZ7Q==')
-    %    % or where a non default configuration file holding credentials is used
+    %
+    %    % where a non default configuration file holding credentials is used
     %    docClient = azure.documentdb.DocumentClient('configurationFile', '/my/path/myconfigfile.json')
+    %
+    %    % where a non default connection policy is required e.g. to set a proxy
+    %    myConnectionPolicy = azure.documentdb.ConnectionPolicy();
+    %    myConnectionPolicy.setProxy('http://proxy.example.com:3128');
+    %    docClient = azure.documentdb.DocumentClient('connectionPolicy', myConnectionPolicy)
+    %
+    %    % where a custom consistency level is required, the default is session
+    %    myConsistencyLevel = azure.documentdb.ConsistencyLevel.Strong;
+    %    docClient = azure.documentdb.DocumentClient('consistencyLevel', myConsistencyLevel)
+
 
     % Copyright 2019 The MathWorks, Inc.
 
@@ -36,15 +48,23 @@ classdef DocumentClient < azure.object
             addParameter(p,'serviceEndpoint','');
             addParameter(p,'masterKey','');
             addParameter(p,'configurationFile','');
+            addParameter(p,'consistencyLevel','');
+            addParameter(p,'connectionPolicy','');
             parse(p,varargin{:});
             serviceEndpoint = p.Results.serviceEndpoint;
             masterKey = p.Results.masterKey;
             configurationFile = p.Results.configurationFile;
+            consistencyLevel = p.Results.consistencyLevel;
+            connectionPolicy = p.Results.connectionPolicy;
+
+            % Create a logger object
+            logObj = Logger.getLogger();
+            logObj.MsgPrefix = 'Azure:SQL';
+            % In normal operation use default level: debug
+            % logObj.DisplayLevel = 'verbose';
 
             % Check that version R2017b or later is being used
             if verLessThan('matlab','9.3')
-                % Create a logger object
-                logObj = Logger.getLogger();
                 write(logObj,'error','MATLAB Release 2017b or newer is required');
             end
 
@@ -64,10 +84,29 @@ classdef DocumentClient < azure.object
                 obj.masterKey = masterKey;
             end
 
-            myConnectionPolicyJ = com.microsoft.azure.documentdb.ConnectionPolicy();
-            myConnectionPolicyJ = myConnectionPolicyJ.GetDefault();
-            myConsistencyEnumJ = com.microsoft.azure.documentdb.ConsistencyLevel.Session;
-            obj.Handle = com.microsoft.azure.documentdb.DocumentClient(obj.serviceEndpoint, obj.masterKey, myConnectionPolicyJ, myConsistencyEnumJ);
+            % Default to session consistency if the level is not set explicitly
+            if isempty(consistencyLevel)
+                consistencyLevel = azure.documentdb.ConsistencyLevel.Session;
+            else
+                if ~isa(consistencyLevel, 'azure.documentdb.ConsistencyLevel')
+                    write(logObj,'error','Invalid ConsistencyLevel argument');
+                end
+            end
+            % Get the Java form of the enum for the client constructor
+            consistencyLevelJ = consistencyLevel.toJava();
+
+            % May have a custom connection policy if there is a proxy set
+            if isempty(connectionPolicy)
+                connectionPolicy = azure.documentdb.ConnectionPolicy();
+            else
+                if ~isa(connectionPolicy, 'azure.documentdb.ConnectionPolicy')
+                    write(logObj,'error','Invalid ConnectionPolicy argument');
+                end
+            end
+            % Pass the Java handle to the client constructor
+            connectionPolicyJ = connectionPolicy.Handle;
+
+            obj.Handle = com.microsoft.azure.documentdb.DocumentClient(obj.serviceEndpoint, obj.masterKey, connectionPolicyJ, consistencyLevelJ);
 
         end %function
     end %methods
