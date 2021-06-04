@@ -5,7 +5,7 @@ function tf = existsUserDefinedFunction(obj, udfLink, options)
 % exception false is returned otherwise true is returned. Thus true may be
 % returned in the case of other exceptions even if the database does not exist.
 
-% Copyright 2019 The MathWorks, Inc.
+% Copyright 2019-2021 The MathWorks, Inc.
 
 logObj = Logger.getLogger();
 
@@ -22,7 +22,7 @@ try
     tf = true;
 catch ex
     % if the exception is database doesn't exist don't throw it and return false
-    if contains(ex.message, 'com.microsoft.azure.documentdb.DocumentClientException: Message: {"Errors":["Resource Not Found"]}')
+    if contains(ex.message, 'com.microsoft.azure.documentdb.DocumentClientException: Message: {"Errors":["Resource Not Found')
         tf = false;
     else
         % It may exists and the exception is something other than "Resource

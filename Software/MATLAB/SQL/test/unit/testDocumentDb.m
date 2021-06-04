@@ -34,7 +34,7 @@ classdef testDocumentDb < matlab.unittest.TestCase
     methods (Test)
         function testDocClientObject(testCase)
             % reads default config file
-            disp('Runnning testDocClientObject');
+            disp('Running testDocClientObject');
             docClient = azure.documentdb.DocumentClient();
             testCase.verifyNotEmpty(docClient.masterKey);
             testCase.verifyNotEmpty(docClient.serviceEndpoint);
@@ -47,7 +47,7 @@ classdef testDocumentDb < matlab.unittest.TestCase
 
         function testDocClientNonDefaultConfig(testCase)
             % reads non default config file
-            disp('Runnning testDocClientNonDefaultConfig');
+            disp('Running testDocClientNonDefaultConfig');
             configFile = which('documentdb.json');
             [filepath,~,~] = fileparts(configFile);
             NonDefaultConfigFile = fullfile(filepath,'NonDefaultConfigFile.json');
@@ -70,7 +70,7 @@ classdef testDocumentDb < matlab.unittest.TestCase
 
         function testDocClientNonDefaultConfigParams(testCase)
             % reads non default config file
-            disp('Runnning testDocClientNonDefaultConfigParams');
+            disp('Running testDocClientNonDefaultConfigParams');
             configFile = which('documentdb.json');
             config = jsondecode(fileread(which(configFile)));
 

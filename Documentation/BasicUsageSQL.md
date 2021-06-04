@@ -1,7 +1,9 @@
 # MATLAB Interface *for Azure Cosmos DB* - SQL API
 
 ## Getting Started
-The Cosmos DB SQL API supported by this package builds upon the Microsoft Java SDK for the Cosmos DB SQL API. Further details on Cosmos DB and the SQL SDK can be found here: [https://docs.microsoft.com/en-us/azure/cosmos-db/introduction](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction)
+The Cosmos DB SQL API supported by this package builds upon the Microsoft Java SDK for the Cosmos DB SQL API. Further details on Cosmos DB and the SQL SDK can be found here: [https://docs.microsoft.com/en-us/azure/cosmos-db/introduction](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction).
+This interface uses the original Azure Cosmos DB Sync Java SDK v2 for SQL API which supports synchronous operations. Newer versions of the Java SDK exist, if consulting third party documentation take care to note which SDK version is referenced.
+
 
 This document is a basic guide to using the Interface and does not describe Cosmos DB itself or all of the supported operations. Further details can be found in the [API reference document](ApiRefSQL.md). The provided test suite */Software/MATLAB/SQL/test/unit/testDocumentDb.m* can also serve as a reference. For information on accessing Cosmos DB via APIs other than SQL, e.g. Table, see the respective documentation.
 
@@ -150,4 +152,4 @@ end
 * [Microsoft Java Tests](https://github.com/Azure/azure-cosmosdb-java/tree/master/sdk/src/test/java/com/microsoft/azure/cosmosdb/rx)
 
 ------------
-[//]: #  (Copyright 2019, The MathWorks, Inc.)
+[//]: #  (Copyright 2019-2021, The MathWorks, Inc.)

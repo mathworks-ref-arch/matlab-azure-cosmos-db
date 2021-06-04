@@ -27,7 +27,7 @@ classdef DocumentClient < azure.object
     %    docClient = azure.documentdb.DocumentClient('consistencyLevel', myConsistencyLevel)
 
 
-    % Copyright 2019 The MathWorks, Inc.
+    % Copyright 2019-2021 The MathWorks, Inc.
 
     properties(SetAccess = private)
         % Stores the username used to authenticate
@@ -66,6 +66,10 @@ classdef DocumentClient < azure.object
             % Check that version R2017b or later is being used
             if verLessThan('matlab','9.3')
                 write(logObj,'error','MATLAB Release 2017b or newer is required');
+            end
+
+            if ~usejava('jvm')
+                write(logObj,'error','MATLAB must be used with the JVM enabled');
             end
 
             % If the endpoint and key are not provided use the config file

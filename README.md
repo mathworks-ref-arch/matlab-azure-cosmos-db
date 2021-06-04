@@ -5,11 +5,15 @@ This is a MATLAB® interface that connects to the Microsoft® Azure Cosmos DB™
 ## Requirements
 ### MathWorks products
 * Requires MATLAB release R2017b or later
-* Requires Database Toolbox (for MongoDB API)
-* [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob) release 0.7.4 or later
+* Table API
+  - [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob), release 0.7.4 or later
+* MongoDB API
+  - Supported directly in Database Toolbox R2019b and later, see below 
+  - Database Toolbox
+  - Database Toolbox Interface for MongoDB, [https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html](https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html)
 
 ### 3rd party products
-To build a required JAR file:
+To build required JARs files for Gremlin, Table & SQL APIs:
 * Maven™
 * JDK 8
 * Microsoft® Azure Cosmos DB SDK for Java®
@@ -20,14 +24,19 @@ Please refer to the documents in the [Documentation](Documentation/README.md) fo
 
 Azure Cosmos DB is a globally distributed, multi-model database from Microsoft. Azure Cosmos DB enables you to elastically and independently scale throughput and storage across any number of Azure's geographic regions. It offers throughput, latency, availability, and consistency guarantees with comprehensive service level agreements.
 
-This interface supports three interfaces for Cosmos DB:
+This interface supports four interfaces for Cosmos DB:
   * MongoDB API
+    - This package is not required to access the Cosmos DB MonogDB interface in Database Toolbox R2019b or later. Support has been removed in release 0.2.0 and later. For convenience documentation relating to the Database Toolbox support has been [retained and updated](Documentation/BasicUsageMongoDB.md).
   * SQL (DocumentDB) API
   * Table API
+  * Gremlin API
 
-The Gremlin API and Cassandra API are not currently supported.
+The Cassandra API is currently not supported.
 
 ## SQL API
+
+This interface uses the original Azure Cosmos DB Sync Java SDK v2 for SQL API which supports synchronous operations.
+
 The following are the main features of the interface:
 * Create, read, query & delete Databases
 * Create, read, query & delete Collections
@@ -100,7 +109,7 @@ The following sample code connects to a database and inserts some sample data.
 conn = mongo("myusername.documents.azure.com", 10255, "mydatabasename",...
 "UserName", "myusername",...
 "Password", "sa<REDACTED>Ewg==",...
-"AuthMechanism", "MONGODB_CR", "SSLEnable", true);
+"AuthMechanism", "SCRAM_SHA_1", "SSLEnabled", true);
 
 % Create a collection
 myCollectionName = 'MongoTestCollection';
@@ -125,6 +134,76 @@ data = conn.insert(myCollectionName, T);
 conn.close();
 ```
 
+## Gremlin API
+
+The Gremlin API allows you to create and manage an  Microsoft® Azure Cosmos DB™ Gremlin (graph) API account. You will need a Gremlin (Graph) database account with Azure Cosmos DB before you get started. Details on creating a Graph database account can be found [here](https://docs.microsoft.com/en-us/azure/cosmos-db/create-graph-java#create-a-database-account).
+
+The next step would be to configure the credentials for the database account. The credentials need to be placed at the folder location `MATLAB/Gremlin/config` for the API to access them. Please see `gremlindb.yml.template` for reference. Details on accessing credentials from the Azure Cosmos DB Gremlin API account can be found [here](https://docs.microsoft.com/en-us/azure/cosmos-db/create-graph-java#update-your-connection-information).
+
+Once the credentails have been put in place, follow the instructions provided within [Installation](Documentation/Installation.md) to install the API for use. Run the `startup.m` file within `Software/MATLAB/Gremlin` once you have completed the installation steps.
+
+The following sections contain sample code for getting started with the API. A more detailed example is available at [GettingStarted](Documentation/BasicUsageGremlin.md).
+
+### Create a MATLAB client for Azure Cosmos DB Gremlin API
+The MATLAB class `GremlinClient` reads credentials from the YAML file located at `MATLAB/Gremlin/config` and returns a MATLAB client object as follows:
+
+```
+gClient = azure.gremlin.GremlinClient('gremlindb.yml')
+```
+
+### Construct a Gremlin query
+Queries need to be defined as strings in MATLAB. You can pass either a single query or multiple queries using a cell array.
+
+```
+%  Write a query to drop any existing graph in the sample database
+%  The following is a single query string passed within a MATLAB cell array
+
+queries = {"g.V().drop()"};
+
+%  For multiple queries you can pass comma seperated query strings within the cell array.
+```
+Note: If a script or query is to be executed repeatedly with slightly different arguments, consider concatenating queries rather than dynamically produced strings, see [basic usage](Documentation/BasicUsageGremlin.md).
+
+### Submit a Gremlin query to Azure Cosmos DB Graph
+One can submit small queries synchronously using the `submit()` method. Once the client finishes writing all requests, query response is returned within an object `ResultSet`. One can use the method `get()` to return any resultant dataset pertaining to the query.
+
+```
+% Submit queries synchronously
+
+resultSet = gClient.submit(queries);
+
+% Get query results
+
+response = resultSet.get;
+```
+
+### Creating and submitting multiple GREMLIN queries.
+Use a cell array containing the multiple queries to submit requests to the Gremlin Server.
+In the below example, multiple queries are submitted to feed data in the Graph database. Multiple graph vertices with properties such as `id`, `firstName`, `lastName`, `age` and `partitionKey` ar being created with the label `person` with the help of the Gremlin step `addV`.
+
+```
+queries  = {"g.addV('person').property('id', 'thomas').property('firstName', 'Thomas').property('age', 44).property('pk', 'pk')",...
+    "g.addV('person').property('id', 'mary').property('firstName', 'Mary').property('lastName', 'Andersen').property('age', 39).property('pk', 'pk')",...
+    "g.addV('person').property('id', 'ben').property('firstName', 'Ben').property('lastName', 'Miller').property('age', 55).property('pk', 'pk')",...
+    "g.addV('person').property('id', 'robin').property('firstName', 'Robin').property('lastName', 'Wakefield').property('age', 22).property('pk', 'pk')"};
+```
+
+### Submitting Asynchronous requests.
+One can submit multiple or large queries asynchronously using the `submitAsync` method, where the query results can be gathered once the client completes writing all queries.
+
+```
+% Resultset of type completablefurture is returned
+completableFutureResults = gClient.submitAsync(queries);
+
+% Get final Response post asynchronous call completion
+response = completableFutureResults.get;
+```
+
+### Closing the client connection to the Database
+```
+gClient.close()
+
+```
 ## Supported Products
 
 MathWorks Products (http://www.mathworks.com)
@@ -133,10 +212,10 @@ MathWorks Products (http://www.mathworks.com)
 3.  MATLAB Production Server (R2017b or later)
 4.  MATLAB Parallel Server (R2017b or later)
 
-This package is primarily tested on Ubuntu™ 16.04 and Windows™ 10.
+This package is primarily tested on Ubuntu™ 20.04 and Windows™ 10.
 
 ## License
-The license for the MATLAB Interface *for Azure Cosmos DB* is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.    
+The license for the MATLAB Interface *for Azure Cosmos DB* is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [SQL/pom.xml](Software/SQL/Java/pom.xml) & [Gremlin/pom.xml](Software/Gremlin/Java/pom.xml) files for third-party software downloaded at build time.    
 
 ## Enhancement Request
 Provide suggestions for additional features or capabilities using the following link:   
@@ -145,5 +224,4 @@ https://www.mathworks.com/products/reference-architectures/request-new-reference
 ## Support
 Email: `mwlab@mathworks.com`
 
-------------
-[//]: #  (Copyright 2019-2020, The MathWorks, Inc.)
+[//]: #  (Copyright 2019-2021, The MathWorks, Inc.)
