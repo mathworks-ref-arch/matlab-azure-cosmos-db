@@ -6,7 +6,7 @@ This is a MATLAB® interface that connects to the Microsoft® Azure Cosmos DB™
 ### MathWorks products
 * Requires MATLAB release R2017b or later
 * Table API
-  - [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob), release 0.7.4 or later
+  - [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob) release 0.7.4 or later, This dependency has been deprecated and is not recommended.
 * MongoDB API
   - Supported directly in Database Toolbox R2019b and later, see below 
   - Database Toolbox
@@ -76,7 +76,7 @@ docClient.close;
 ```
 
 ## Table API
-The Table API supports the features provided by the Table interface provided by the [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob).
+The Table API supports the features provided by the Table interface provided by the [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob). This dependency has been deprecated and is not recommended. See: [https://github.com/mathworks-ref-arch/matlab-azure-services](https://github.com/mathworks-ref-arch/matlab-azure-services)
 
 For example when an authenticated CloudStorageAccount object has been created it can be used to create a client which in turn can create table and list table contents as shown.
 
@@ -206,7 +206,7 @@ gClient.close()
 ```
 ## Supported Products
 
-MathWorks Products (https://www.mathworks.com)
+MathWorks Products (http://www.mathworks.com)
 1.  MATLAB (R2017b or later)
 2.  MATLAB Compiler and Compiler SDK (R2017b or later)
 3.  MATLAB Production Server (R2017b or later)
@@ -224,4 +224,4 @@ https://www.mathworks.com/products/reference-architectures/request-new-reference
 ## Support
 Email: `mwlab@mathworks.com`
 
-[//]: #  (Copyright 2019-2021, The MathWorks, Inc.)
+[//]: #  (Copyright 2019-2023, The MathWorks, Inc.)

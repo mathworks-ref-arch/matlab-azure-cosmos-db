@@ -18,7 +18,7 @@ classdef testMongoDB < matlab.unittest.TestCase
     
     properties
         % MongoDB testDatabase name - update with actual value -
-        testCase.databaseName = 'mbcosmosdbmongodbtest';
+        databaseName = 'mbcosmosdbmongodbtest';
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,7 +88,7 @@ classdef testMongoDB < matlab.unittest.TestCase
             T = table(LastName,Age,Smoker,Height,Weight,BloodPressure);
             
             % put some data into MongoDB from a Table
-            data = conn.insert(myCollectionName, T);
+            data = conn.insert(myCollectionName, T); %#ok<NASGU> 
             dataCount = count(conn, myCollectionName);
             testCase.verifyEqual(dataCount, 5);
             

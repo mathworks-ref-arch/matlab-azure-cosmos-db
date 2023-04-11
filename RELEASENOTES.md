@@ -1,13 +1,21 @@
 # MATLAB Interface *for Azure Cosmos DB*
 # Release Notes
 
+## Release 0.2.1 (11th April 2023)
+* POM file security updates
+* Deprecated matlab-azure-blob usage
+
 ## Release 0.2.0 (4th June 2021)
 * Added Gremlin API support
 * Updated SQL existence checks to match updated server responses
 * Updated SQL interface Azure Java SDK version
 * Removed support for MongoDB interface, now fully supported by Database Toolbox Interface for MongoDB (>= R2019b)
 
-## Release 0.1.3 (14th March 2020)
+## Release 0.1.4 (5th March 2020)
+* Updated license
+* Updated security notice
+
+## Release 0.1.3 (14th February 2020)
 * Fixed missing network preferences image
 * Added Document getBoolean, toString() and toJson() methods
 * Clarified Database Toolbox requirement
