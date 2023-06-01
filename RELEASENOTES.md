@@ -1,6 +1,9 @@
 # MATLAB Interface *for Azure Cosmos DB*
 # Release Notes
 
+## Release 0.2.2 (1st June 2023)
+* POM file security updates
+
 ## Release 0.2.1 (11th April 2023)
 * POM file security updates
 * Deprecated matlab-azure-blob usage
