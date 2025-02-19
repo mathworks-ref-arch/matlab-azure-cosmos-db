@@ -98,7 +98,7 @@ tableList =
 ```
 
 ## MongoDB API
-MongoDB API support requires the installation of the MathWorks Database Toolbox and the Database Toolbox Interface for MongoDB. This package installation details can be found here: [https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html](https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html).
+MongoDB API support requires the installation of the MathWorks Database Toolbox. The Database Toolbox Interface for MongoDB ships with the Database toolbox since R2019b. 
 
 The following sample code connects to a database and inserts some sample data.
 ```
