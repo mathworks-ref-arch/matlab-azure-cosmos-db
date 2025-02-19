@@ -4,13 +4,11 @@ This is a MATLAB® interface that connects to the Microsoft® Azure Cosmos DB™
 
 ## Requirements
 ### MathWorks products
-* Requires MATLAB release R2017b or later
+* Requires MATLAB release R2019b or later
+* Database Toolbox
+  - The MongoDB API is supported directly in Database Toolbox R2019b and later, see below 
 * Table API
   - [MATLAB Interface *for Windows Azure Storage Blob*](https://github.com/mathworks-ref-arch/matlab-azure-blob) release 0.7.4 or later, This dependency has been deprecated and is not recommended.
-* MongoDB API
-  - Supported directly in Database Toolbox R2019b and later, see below 
-  - Database Toolbox
-  - Database Toolbox Interface for MongoDB, [https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html](https://www.mathworks.com/help/database/ug/database-toolbox-interface-for-mongodb-installation.html)
 
 ### 3rd party products
 To build required JARs files for Gremlin, Table & SQL APIs:
